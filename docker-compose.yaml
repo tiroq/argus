@@ -1,0 +1,21 @@
+services:
+  nats:
+    # https://github.com/bmcustodio/docker-compose-nats-cluster/tree/master
+    # https://docs.nats.io/running-a-nats-service/nats_docker#creating-a-nats-cluster-with-docker-compose
+    image: nats:latest
+    ports:
+      - "4222:4222"  # NATS server port
+
+  telegram-connector:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.telegram-connector
+    image: telegram-connector
+    container_name: telegram-connector
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NATS_URL=nats://nats:4222
+    depends_on:
+      - nats
