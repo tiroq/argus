@@ -1,0 +1,11 @@
+FROM golang:1.23-alpine
+
+RUN mkdir /app
+
+ADD . /app
+
+WORKDIR /app
+
+RUN go build -o telegram-connector cmd/telegram/main.go
+
+CMD ["/app/telegram-connector"]
