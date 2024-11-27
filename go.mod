@@ -3,6 +3,7 @@ module github.com/tiroq/argus
 go 1.23
 
 require (
+	github.com/mattn/go-sqlite3 v1.14.24
 	github.com/nats-io/nats.go v1.37.0
 	github.com/tucnak/telebot v2.0.0+incompatible
 )

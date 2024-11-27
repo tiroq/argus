@@ -5,6 +5,20 @@ services:
     image: nats:latest
     ports:
       - "4222:4222"  # NATS server port
+    
+  data-scraper:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.data-scraper
+    image: data-scraper
+    container_name: data-scraper
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NATS_URL=nats://nats:4222
+    depends_on:
+      - nats
 
   telegram-connector:
     build:
@@ -19,3 +33,4 @@ services:
       - NATS_URL=nats://nats:4222
     depends_on:
       - nats
+      - data-scraper

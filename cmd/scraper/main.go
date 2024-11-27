@@ -4,19 +4,20 @@ import (
 	"log"
 
 	"github.com/tiroq/argus/internal/config"
-	"github.com/tiroq/argus/services/telegram-connector"
+	scraper "github.com/tiroq/argus/services/data-scraper"
 )
 
 func main() {
+
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		log.Fatal("Failed to load config:", err)
 	}
 
-	bot, err := telegram.New(cfg)
+	srvc, err := scraper.New(cfg)
 	if err != nil {
-		log.Fatal("Failed to create Telegram bot:", err)
+		log.Fatal("Failed to create scraper:", err)
 	}
 
-	bot.Start()
+	srvc.Start()
 }
