@@ -1,9 +1,13 @@
 package user
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
+	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/nats-io/nats.go"
 )
 
@@ -36,25 +40,39 @@ func NewUserService(options ...Option) *UserService {
 // }
 
 // GetCurrentRate fetches the current rate from the rate API
-func (us *UserService) GetCurrentRate() (string, error) {
+func (us *UserService) GetCurrentRate(userId int64, task string) (*CurrentCurrencyRateResponse, error) {
+	// Split the string into "From" and "To" currencies
+	parts := strings.Split(task, "2")
+	if len(parts) != 2 {
+		return nil, fmt.Errorf("invalid format for task: %s", task)
+	}
+
+	// Convert "From" and "To" currencies to uppercase
+	fromCurrency := strings.ToUpper(parts[0])
+	toCurrency := strings.ToUpper(parts[1])
 	request := CurrentCurrencyRateRequest{
-		RequestID: "123",
-		UserID:    1,
-		Currency:  "USD",
+		RequestID: uuid.New().String(),
+		UserID:    int(userId),
+		From:      fromCurrency,
+		To:        toCurrency,
 	}
 	requestJson, err := request.ToJSON()
 	if err != nil {
-		return "", err
-	}
-	msg, err := us.nc.Request("currency.rate", requestJson, 5*time.Second)
-	if err != nil {
-		return "", err
-	}
-	resp := CurrentCurrencyRateResponse{}
-	err = json.Unmarshal(msg.Data, &resp)
-	if err != nil {
-		return "", err
+		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	return resp.Rate, nil
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel() // should always be called, not discarded, to prevent context leak
+
+	msg, err := us.nc.RequestWithContext(ctx, "bog.currency.rate", requestJson)
+	if err != nil {
+		return nil, fmt.Errorf("failed to send request: %w", err)
+	}
+
+	resp := &CurrentCurrencyRateResponse{}
+	err = json.Unmarshal(msg.Data, &resp)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
+	}
+	return resp, nil
 }
