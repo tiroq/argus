@@ -5,11 +5,11 @@ import (
 	"os"
 
 	"github.com/tiroq/argus/internal/config"
-	scraper "github.com/tiroq/argus/services/data-scraper"
+	bogcurrencyrate "github.com/tiroq/argus/services/bog-currency-rate"
 )
 
 func main() {
-	slog.Info("Starting scraper service")
+	slog.Info("Starting BoG currency rate service")
 
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -17,9 +17,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	srvc, err := scraper.New(cfg)
+	srvc, err := bogcurrencyrate.New(cfg)
 	if err != nil {
-		slog.Error("Failed to create scraper:", slog.String("error", err.Error()))
+		slog.Error("Failed to create BoG currency rate service :", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 

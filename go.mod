@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/google/uuid v1.6.0
 	github.com/klauspost/compress v1.17.2 // indirect
 	github.com/mitchellh/hashstructure v1.1.0 // indirect
 	github.com/nats-io/nkeys v0.4.7 // indirect
@@ -16,4 +17,5 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	golang.org/x/crypto v0.18.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
+	gopkg.in/telebot.v4 v4.0.0-beta.4
 )

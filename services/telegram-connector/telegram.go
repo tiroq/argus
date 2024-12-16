@@ -8,7 +8,7 @@ import (
 	"github.com/nats-io/nats.go"
 	"github.com/tiroq/argus/internal/config"
 	"github.com/tiroq/argus/usecases/user"
-	"github.com/tucnak/telebot"
+	"gopkg.in/telebot.v4"
 )
 
 type TelegramBot struct {
@@ -16,6 +16,7 @@ type TelegramBot struct {
 	bus         *nats.Conn
 	bot         *telebot.Bot
 	userService *user.UserService
+	menu        *Menu
 }
 
 func New(cfg *config.Config) (*TelegramBot, error) {
@@ -51,13 +52,22 @@ func New(cfg *config.Config) (*TelegramBot, error) {
 		bus:         nc,
 		bot:         b,
 		userService: userService,
+		menu:        NewMenu(),
 	}, nil
 }
 
 func (tb *TelegramBot) Start() {
 	tb.bot.Handle("/start", tb.handleStartCommand)
+	tb.bot.Handle("/menu", tb.handleMenuCommand)
+	tb.bot.Handle("/help", tb.handleHelpCommand)
 	tb.bot.Handle("/subscribe", tb.handleSubscribeCommand)
 	tb.bot.Handle("/unsubscribe", tb.handleUnSubscribeCommand)
 	tb.bot.Handle("/rate", tb.handleRateCommand)
+
+	// Buttons
+	tb.bot.Handle(tb.menu.BoG, tb.handleBoGCommand)
+	tb.bot.Handle(tb.menu.Help, tb.handleHelpCommand)
+	tb.menu.InlineBoGMenu.AddButtonsHandling(tb)
+	// tb.bot.Handle(&inlineMenu, tb.handleInlineMenu)
 	tb.bot.Start()
 }

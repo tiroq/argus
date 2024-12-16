@@ -1,13 +1,23 @@
 package telegram
 
-import "github.com/tucnak/telebot"
+import (
+	"fmt"
+	"strconv"
 
-func (h *TelegramBot) handleRateCommand(m *telebot.Message) {
-	rate, err := h.userService.GetCurrentRate()
+	"gopkg.in/telebot.v4"
+)
+
+func (h *TelegramBot) handleRateCommand(c telebot.Context) error {
+	h.logger.Info("Rate requested", "user_id", c.Sender().ID, "data", c.Data())
+	rate, err := h.userService.GetCurrentRate(c.Sender().ID, c.Data())
+	strRate := strconv.FormatFloat(rate.Rate, 'f', -1, 64)
+	strAmount := strconv.FormatFloat(rate.Amount, 'f', -1, 64)
 	if err != nil {
 		h.logger.Error("Failed to retrieve the rate", "error", err)
-		h.bot.Send(m.Sender, "Failed to retrieve the rate.")
+		return c.Send("Failed to retrieve the rate.")
 	} else {
-		h.bot.Send(m.Sender, "The current rate is: "+rate)
+		return c.Send(
+			fmt.Sprintf("Rate for %s --> %s: %s (1000 %s = %s %s)", rate.From, rate.To, strRate, rate.From, strAmount, rate.To),
+		)
 	}
 }

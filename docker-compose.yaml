@@ -1,10 +1,14 @@
 services:
   nats:
+    container_name: nats
     # https://github.com/bmcustodio/docker-compose-nats-cluster/tree/master
     # https://docs.nats.io/running-a-nats-service/nats_docker#creating-a-nats-cluster-with-docker-compose
     image: nats:latest
-    ports:
-      - "4222:4222"  # NATS server port
+    # ports:
+    #   - "4222:4222"  # NATS server port
+  memcached:
+    container_name: memcached
+    image: memcached:latest
     
   data-scraper:
     build:
@@ -12,6 +16,20 @@ services:
       dockerfile: docker/Dockerfile.data-scraper
     image: data-scraper
     container_name: data-scraper
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NATS_URL=nats://nats:4222
+    depends_on:
+      - nats
+  
+  bog-currency-rate:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.bog-currency-rate
+    image: bog-currency-rate
+    container_name: bog-currency-rate
     restart: unless-stopped
     env_file:
       - .env
@@ -33,4 +51,5 @@ services:
       - NATS_URL=nats://nats:4222
     depends_on:
       - nats
-      - data-scraper
+      # - data-scraper
+      - bog-currency-rate
