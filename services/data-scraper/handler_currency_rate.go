@@ -1,7 +1,6 @@
 package scraper
 
 import (
-	"encoding/json"
 	"log/slog"
 
 	"github.com/nats-io/nats.go"
@@ -11,7 +10,7 @@ import (
 func (s *Scraper) handleCurrencyRate(msg *nats.Msg) {
 	s.logger.Info("Received currency rate request", "rate", string(msg.Data))
 	request := user.CurrentCurrencyRateRequest{}
-	if err := json.Unmarshal(msg.Data, &request); err != nil {
+	if err := request.FromJSON(msg.Data); err != nil {
 		s.logger.Error("Failed to unmarshal request",
 			slog.String("error", err.Error()))
 		return
@@ -19,9 +18,9 @@ func (s *Scraper) handleCurrencyRate(msg *nats.Msg) {
 
 	response := user.CurrentCurrencyRateResponse{
 		RequestID: request.RequestID,
-		Rate:      "1.2345",
+		Rate:      1.2345,
 	}
-	data, err := json.Marshal(response)
+	data, err := response.ToJSON()
 	if err != nil {
 		s.logger.Error("Failed to marshal response",
 			slog.String("error", err.Error()))
