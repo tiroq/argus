@@ -11,8 +11,10 @@ import (
 
 type RateResponse struct {
 	Data struct {
-		Rate   float64 `json:"rateSelf"`
-		Amount float64 `json:"amountSelf"`
+		Rate       float64 `json:"rate"`       // iBank rate(via Web)
+		Amount     float64 `json:"amount"`     // iBank amount
+		RateSelf   float64 `json:"rateSelf"`   // Self rate on exchange via mobile bank
+		AmountSelf float64 `json:"amountSelf"` // Self amount
 	} `json:"data"`
 }
 

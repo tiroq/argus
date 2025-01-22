@@ -29,11 +29,13 @@ func (r *CurrentCurrencyRateRequest) FromJSON(data []byte) error {
 }
 
 type CurrentCurrencyRateResponse struct {
-	RequestID string  `json:"request_id"`
-	Rate      float64 `json:"rate"`
-	Amount    float64 `json:"amount"`
-	From      string  `json:"from"`
-	To        string  `json:"to"`
+	RequestID  string  `json:"request_id"`
+	Rate       float64 `json:"rate"`
+	Amount     float64 `json:"amount"`
+	RateSelf   float64 `json:"rateSelf"`
+	AmountSelf float64 `json:"amountSelf"`
+	From       string  `json:"from"`
+	To         string  `json:"to"`
 }
 
 func (r CurrentCurrencyRateResponse) ToJSON() ([]byte, error) {

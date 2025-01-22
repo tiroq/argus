@@ -33,11 +33,13 @@ func (s *BoGRatesProvider) handleCurrencyRate(msg *nats.Msg) {
 	s.logger.Info("Sending currency rate response", "rate", rate)
 
 	response := user.CurrentCurrencyRateResponse{
-		RequestID: request.RequestID,
-		Amount:    rate.Data.Amount,
-		Rate:      rate.Data.Rate,
-		From:      request.From,
-		To:        request.To}
+		RequestID:  request.RequestID,
+		Amount:     rate.Data.Amount,
+		Rate:       rate.Data.Rate,
+		AmountSelf: rate.Data.AmountSelf,
+		RateSelf:   rate.Data.RateSelf,
+		From:       request.From,
+		To:         request.To}
 	data, err := response.ToJSON()
 	if err != nil {
 		s.logger.Error("Failed to marshal response",
