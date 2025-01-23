@@ -3,10 +3,10 @@ GO_PROJECT_NAME := argus
 build:
 	docker compose build
 
-up: build
+up:
 	docker compose up
 
-run: build
+run:
 	docker compose up -d
 
 stop:
