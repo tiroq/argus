@@ -38,6 +38,20 @@ services:
     depends_on:
       - nats
 
+  kursi-ge:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.kursi-ge
+    image: kursi-ge
+    container_name: kursi-ge
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NATS_URL=nats://nats:4222
+    depends_on:
+      - nats
+
   telegram-connector:
     build:
       context: .

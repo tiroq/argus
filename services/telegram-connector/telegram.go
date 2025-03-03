@@ -41,7 +41,7 @@ func New(cfg *config.Config) (*TelegramBot, error) {
 		return nil, err
 	}
 
-	userService := user.NewUserService(user.WithBus(nc))
+	userService := user.NewUserService(user.WithBus(nc), user.WithLogger(logger))
 	// if err != nil {
 	// 	logger.Error("Failed to create user service",
 	// 		slog.String("error", err.Error()))
