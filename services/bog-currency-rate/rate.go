@@ -7,6 +7,7 @@ import (
 
 	"github.com/nats-io/nats.go"
 	"github.com/tiroq/argus/internal/config"
+	"github.com/tiroq/argus/internal/endpoints"
 )
 
 type RateResponse struct {
@@ -54,6 +55,6 @@ func New(cfg *config.Config) (*BoGRatesProvider, error) {
 }
 
 func (s *BoGRatesProvider) Start() {
-	s.nc.Subscribe("bog.currency.rate", s.handleCurrencyRate)
+	s.nc.Subscribe(endpoints.SEVICE_BOG, s.handleCurrencyRate)
 	select {} // Block the main goroutine
 }
