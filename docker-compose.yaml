@@ -6,6 +6,7 @@ services:
     image: nats:latest
     # ports:
     #   - "4222:4222"  # NATS server port
+
   memcached:
     container_name: memcached
     image: memcached:latest
@@ -67,3 +68,18 @@ services:
       - nats
       # - data-scraper
       - bog-currency-rate
+
+  # postgesql:
+  #   image: postgres:13-alpine
+  #   container_name: mails_postgesql
+  #   expose:
+  #     - "5432"
+  #   ports:
+  #     - "5432:5432"
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   command: -p 5432
+  #   volumes:
+  #     - ./pgdata:/var/lib/postgresql/data
+  #   networks: [ "nats" ]
