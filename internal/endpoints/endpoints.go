@@ -1,6 +1,7 @@
 package endpoints
 
 var (
-	SEVICE_KURSI_GE = "kursige.currency.rate"
-	SEVICE_BOG      = "bog.currency.rate"
+	SVC_KURSI_GE = "kursige.currency.rate"
+	SVC_BOG      = "bog.currency.rate"
+	SVC_NBG_HIST = "nbg.currency.history"
 )

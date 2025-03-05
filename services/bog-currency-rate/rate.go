@@ -55,6 +55,6 @@ func New(cfg *config.Config) (*BoGRatesProvider, error) {
 }
 
 func (s *BoGRatesProvider) Start() {
-	s.nc.Subscribe(endpoints.SEVICE_BOG, s.handleCurrencyRate)
+	s.nc.Subscribe(endpoints.SVC_BOG, s.handleCurrencyRate)
 	select {} // Block the main goroutine
 }

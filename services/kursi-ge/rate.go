@@ -73,7 +73,7 @@ func New(cfg *config.Config) (*KursiGERatesProvider, error) {
 
 func (s *KursiGERatesProvider) Start() {
 	s.logger.Info("Starting KursiGE service")
-	s.nc.Subscribe(endpoints.SEVICE_KURSI_GE, s.handleCurrencyRate)
+	s.nc.Subscribe(endpoints.SVC_KURSI_GE, s.handleCurrencyRate)
 	s.logger.Info("KursiGE service started")
 	select {} // Block the main goroutine
 }
