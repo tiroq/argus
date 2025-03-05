@@ -73,7 +73,7 @@ func (us *UserService) GetCurrentBOGRate(userId int64, task string) (*CurrentCur
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel() // should always be called, not discarded, to prevent context leak
 
-	msg, err := us.nc.RequestWithContext(ctx, endpoints.SEVICE_BOG, requestJson)
+	msg, err := us.nc.RequestWithContext(ctx, endpoints.SVC_BOG, requestJson)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send request: %w", err)
 	}
@@ -110,7 +110,7 @@ func (us *UserService) GetCurrentKursiGERate(userId int64, task string) (*Curren
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel() // should always be called, not discarded, to prevent context leak
 
-	msg, err := us.nc.RequestWithContext(ctx, endpoints.SEVICE_KURSI_GE, requestJson)
+	msg, err := us.nc.RequestWithContext(ctx, endpoints.SVC_KURSI_GE, requestJson)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send request: %w", err)
 	}
