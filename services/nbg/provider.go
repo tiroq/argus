@@ -46,9 +46,9 @@ func New(cfg *config.Config) (*NBGHistoryProvider, error) {
 }
 
 func (s *NBGHistoryProvider) Start() {
-	s.logger.Info("Starting KursiGE service")
+	s.logger.Info("Starting NBG currency history service")
 	s.nc.Subscribe(endpoints.SVC_NBG_HIST, s.handleCurrencyHistory)
-	s.logger.Info("KursiGE service started")
+	s.logger.Info("NBG currency history service started")
 	select {} // Block the main goroutine
 
 }
